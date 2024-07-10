@@ -1,14 +1,3 @@
-/*
-TODO
-- change cred to array
-- fill cred.h.example
-- add mac address
-- add degugmode for println
-
- */
-
-
-
 #include <Arduino.h>
 
 #include <ESP8266WiFi.h>
