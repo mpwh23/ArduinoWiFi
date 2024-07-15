@@ -6,6 +6,9 @@
 // see cred.h.example
 #include <cred.h>  
 
+// replace
+char clientID[18] = "esp_v1           ";
+
 // function declarations:
 bool conWiFi();
 
