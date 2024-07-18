@@ -9,9 +9,6 @@
 // replace
 char clientID[18] = "esp_v1           ";
 
-// networks
-// u_int8_t num_nw = sizeof(nw)/sizeof(nw[0]);
-
 // function declarations:
 bool conWiFi();
 int strongest(cred);
@@ -22,26 +19,15 @@ void setup() {
   delay(500);
 
   digitalWrite(LED_BUILTIN, LOW);
-  Serial.println("Start setup.");
+  Serial.println();
+  Serial.println();
+  Serial.println("------ Start setup ------");
+  Serial.println();
 
   conWiFi();  
 
-  Serial.println("Setup done");
-
-    
-    Serial.println("");
-
-    Serial.println();
-
-    
-
-
-    Serial.println("blub");
- 
-    // Delete the scan result to free memory for code below.
-    WiFi.scanDelete();
-
-
+  Serial.println("------ Setup done ------");
+  Serial.println();
   digitalWrite(LED_BUILTIN, HIGH);
 }
 
@@ -66,26 +52,24 @@ int strongest(cred lst[]){
 }
 
 bool conWiFi(){
-  Serial.println(">");
-  Serial.println(">");
+  Serial.println("  ┌─[conWiFi]");
   //Serial.print("Connecting to ");
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
   delay(100);
 
-  Serial.println("> start scan");
-  // WiFi.scanNetworks will return the number of networks found.
-  int n = WiFi.scanNetworks();
-  Serial.println("> Scan done");
-
+  Serial.println("  ├─┬─[start scan for available networks]");
+  
+  int n = WiFi.scanNetworks();  // return the number of networks found.
+  
   bool con = false;
 
   if (n == 0) {
-        Serial.println(">> no networks found");
+        Serial.println("  │ ├─> no networks found");
+        Serial.println("  ├─┴─[scan done");
     } else {
-      Serial.print(">> ");
-      Serial.print(n);
-      Serial.println(" networks found");
+      Serial.printf("  │ ├─> %2d networks found", n);
+      Serial.println();
 
       int count = 0;
       
@@ -99,26 +83,27 @@ bool conWiFi(){
         }
       }
 
-      Serial.print(">> ");
-      Serial.print(count);
-      Serial.println(" networks matching stored credentials");
+      Serial.printf("  │ ├─> %2d networks matching stored credentials", count);
+      Serial.println();
+      Serial.println("  │ └─[scan done]");
+
+      // Delete the scan result to free memory for code below.
+      WiFi.scanDelete();
 
       // try to connect
-      
       int sel = strongest(nw);
 
       while(sel > -1){
         WiFi.begin(nw[sel].ssid, nw[sel].pw);
-        Serial.print("  WiFi > Try to connect to: ");
-        Serial.print(nw[sel].ssid);
+        Serial.printf("  ├───> Try to connect to: %-32.32s ", (nw[sel].ssid));
+
         for (int i = 0; i <=15; i++){
           delay(500);
           Serial.print(".");
           if(WiFi.status() == WL_CONNECTED){
             con = true;
-            Serial.println();
-            Serial.print("  WiFi > Connected to ");
-            Serial.print(nw[sel].ssid);
+            Serial.println(" OK");
+            Serial.printf("  ├───> Connected to %s", nw[sel].ssid);
             sel = -1;
             break;
           }
@@ -127,28 +112,29 @@ bool conWiFi(){
           // fail to connect, set strength to 0
           strength[sel] = 0;
           sel = strongest(nw);
-          Serial.println();
+          Serial.println(" FAIL");
         }
       }
     }
 
-    Serial.println();
-  
+    String s = WiFi.macAddress();
+    s.replace(":", "");
+    s.toCharArray(clientID, 13);
+      
     if(con){
-      Serial.print("  WiFi > Station IP Address: ");
+      Serial.println("");
+      Serial.println("  └─┬─[conection successfull]");
+      Serial.printf("    ├─> Station ID: %s", clientID);
+      Serial.println();
+      Serial.print("    └─> Station IP: ");
       Serial.println(WiFi.localIP());
-
-      String s = WiFi.macAddress();
-      s.replace(":", "");
-
-      s.toCharArray(clientID, 13);
-      Serial.println("  WiFi > ClientID: " + s);
 
       Serial.println();    
     }else{
-      Serial.print("  WiFi > ERROR no connection!");
-      Serial.println(); 
+      Serial.println("  └─> ERROR no connection!");
     }
+
+    
 
     return con;
 }
