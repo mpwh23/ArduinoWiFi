@@ -10,11 +10,11 @@
 char clientID[18] = "esp_v1           ";
 
 // networks
-u_int8_t num_nw = sizeof(nw)/sizeof(nw[0]);
+// u_int8_t num_nw = sizeof(nw)/sizeof(nw[0]);
 
 // function declarations:
 bool conWiFi();
-int strongest(cred, int);
+int strongest(cred);
 
 void setup() {
 
@@ -51,13 +51,13 @@ void loop() {
 
 
 // function definitions:
-int strongest(cred lst[], int num){
+int strongest(cred lst[]){
   int s = -100;
   int pos = -1;
 
-  for(u_int8_t j = 0; j < num; j++){
-    if(lst[j].strength != 0 && lst[j].strength > s){
-      s = lst[j].strength;
+  for(u_int8_t j = 0; j < num_nw; j++){
+    if(strength[j] != 0 && strength[j] > s){
+      s = strength[j];
       pos = j;
     }
   }
@@ -93,7 +93,7 @@ bool conWiFi(){
       for (int i = 0; i < n; ++i) {
         for(u_int8_t j = 0; j<(num_nw);j++){
           if (strcmp(WiFi.SSID(i).c_str(), nw[j].ssid) == 0) {
-            nw[j].strength = WiFi.RSSI(i);
+            strength[j] = WiFi.RSSI(i);
             count++;
           }
         }
@@ -105,7 +105,7 @@ bool conWiFi(){
 
       // try to connect
       
-      int sel = strongest(nw, num_nw);
+      int sel = strongest(nw);
 
       while(sel > -1){
         WiFi.begin(nw[sel].ssid, nw[sel].pw);
@@ -125,8 +125,8 @@ bool conWiFi(){
         } 
         if(!con){
           // fail to connect, set strength to 0
-          nw[sel].strength = 0;
-          sel = strongest(nw, num_nw);
+          strength[sel] = 0;
+          sel = strongest(nw);
           Serial.println();
         }
       }

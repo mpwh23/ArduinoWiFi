@@ -1,9 +1,8 @@
-**!!! not ready jet !!!**
+**!!! working but some documentation is missing!!!**
 
 
 ## TODO
 * fill this file
-* change cred to array
-* fill cred.h.example
+
 * add mac address
 * add degugmode for println

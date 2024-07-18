@@ -1,1 +1,22 @@
 //remove .example from filename to use this file
+
+struct cred
+{
+    char ssid[255];
+    char pw[255];
+};
+
+// fill in your networks: //////////////////////////////////////////////////////
+cred nw[] = {
+    {"name_of_network_1",   "password4network"},
+    {"name_of_network_2",   "password"},
+    {"...",                 "..."},
+    {"name_of_network_n",   "pw"},
+    
+    // extend if necessary
+};
+
+// system //////////////////////////////////////////////////////////////////////
+const u_int8_t num_nw = sizeof(nw)/sizeof(nw[0]);
+
+int strength[num_nw];
