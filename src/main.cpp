@@ -11,7 +11,7 @@ char clientID[18] = "esp_v1           ";
 
 // function declarations:
 bool conWiFi();
-int strongest(cred);
+int strongest();
 
 void setup() {
 
@@ -37,7 +37,7 @@ void loop() {
 
 
 // function definitions:
-int strongest(cred lst[]){
+int strongest(){
   int s = -100;
   int pos = -1;
 
@@ -68,7 +68,7 @@ bool conWiFi(){
         Serial.println("  │ ├─> no networks found");
         Serial.println("  ├─┴─[scan done");
     } else {
-      Serial.printf("  │ ├─> %2d networks found", n);
+      Serial.printf(   "  │ ├─> %2d networks found", n);
       Serial.println();
 
       int count = 0;
@@ -83,7 +83,7 @@ bool conWiFi(){
         }
       }
 
-      Serial.printf("  │ ├─> %2d networks matching stored credentials", count);
+      Serial.printf( "  │ ├─> %2d networks matching stored credentials", count);
       Serial.println();
       Serial.println("  │ └─[scan done]");
 
@@ -91,7 +91,7 @@ bool conWiFi(){
       WiFi.scanDelete();
 
       // try to connect
-      int sel = strongest(nw);
+      int sel = strongest();
 
       while(sel > -1){
         WiFi.begin(nw[sel].ssid, nw[sel].pw);
@@ -111,7 +111,7 @@ bool conWiFi(){
         if(!con){
           // fail to connect, set strength to 0
           strength[sel] = 0;
-          sel = strongest(nw);
+          sel = strongest();
           Serial.println(" FAIL");
         }
       }
@@ -124,9 +124,9 @@ bool conWiFi(){
     if(con){
       Serial.println("");
       Serial.println("  └─┬─[conection successfull]");
-      Serial.printf("    ├─> Station ID: %s", clientID);
+      Serial.printf( "    ├─> Station ID: %s", clientID);
       Serial.println();
-      Serial.print("    └─> Station IP: ");
+      Serial.print(  "    └─> Station IP: ");
       Serial.println(WiFi.localIP());
 
       Serial.println();    
