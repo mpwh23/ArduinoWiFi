@@ -134,7 +134,5 @@ bool conWiFi(){
       Serial.println("  └─> ERROR no connection!");
     }
 
-    
-
     return con;
 }
