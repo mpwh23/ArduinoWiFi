@@ -11,7 +11,7 @@ cred nw[] = {
     {"name_of_network_1",   "password4network"},
     {"name_of_network_2",   "password"},
     {"...",                 "..."},
-    {"name_of_network_n",   "pw"},
+    {"name_of_network_n",   "pw_n"},
     
     // extend if necessary
 };
